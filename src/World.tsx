@@ -341,7 +341,7 @@ export const World: React.FC<WorldProps> = ({ position = [0, 0, 0], scale = 1 })
       <SignBoard position={[roomX.rightSign, 3.05, 15.15]} label="SMOKING" width={2.8} height={0.72} rotation={[0, -Math.PI / 2, 0]} boardColor="#3a4d66" />
       <Lantern position={[roomX.rightLantern, 3.55, 18.3]} />
 
-      <StaticBlock position={[0, 0.95, -12.7]} size={[24, 1.9, 2.2]} color="#727a82" castShadow />
+      <StaticBlock position={[0, 0.475, -12.7]} size={[24, 0.95, 2.2]} color="#727a82" castShadow />
       <StaticBlock position={[0, 1.95, -18]} size={[24, 2.3, 1.1]} color="#c9d0d6" castShadow />
       <StaticBlock position={[0, 4.1, -15.5]} size={[9.5, 0.7, 1.3]} color="#858b92" castShadow />
       <StaticBlock position={[-roomX.kitchenLowerShelf, 0.85, -15.8]} size={[3.2, 1.7, 1.4]} color="#8e959c" castShadow />
@@ -360,4 +360,3 @@ export const World: React.FC<WorldProps> = ({ position = [0, 0, 0], scale = 1 })
     </group>
   )
 }
-
