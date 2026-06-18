@@ -39,19 +39,11 @@ export const RotatingObject: React.FC<RotatingObjectProps> = ({
           <meshStandardMaterial
             color="#00ffff"
             emissive="#00ffff"
-            emissiveIntensity={0.5}
+            emissiveIntensity={1.1}
             metalness={0.8}
             roughness={0.2}
           />
         </mesh>
-
-        {/* ポイントライト */}
-        <pointLight
-          color="#00ffff"
-          intensity={2}
-          distance={10 * scale}
-          decay={2}
-        />
       </group>
     </group>
   )

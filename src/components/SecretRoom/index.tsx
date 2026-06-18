@@ -68,19 +68,17 @@ export const SecretRoom = () => {
         </mesh>
       </RigidBody>
 
-      {/* 照明 */}
-      <pointLight
-        position={[cx, cy + h - 0.5, cz]}
-        intensity={15}
-        color={ACCENT_COLOR}
-        distance={24}
-      />
-      <pointLight
-        position={[cx, cy + 1, cz]}
-        intensity={8}
-        color="#ffffff"
-        distance={16}
-      />
+      {/* 照明表現は発光マテリアルに寄せて pointLight を使わない */}
+      <mesh position={[cx, cy + h - 0.35, cz]}>
+        <boxGeometry args={[4.8, 0.12, 4.8]} />
+        <meshStandardMaterial
+          color="#fff3df"
+          emissive={ACCENT_COLOR}
+          emissiveIntensity={0.9}
+          transparent
+          opacity={0.92}
+        />
+      </mesh>
 
       {/* 部屋の装飾: 中央の浮遊キューブ */}
       <mesh position={[cx, cy + 2, cz]} castShadow>
@@ -88,7 +86,7 @@ export const SecretRoom = () => {
         <meshStandardMaterial
           color={ACCENT_COLOR}
           emissive={ACCENT_COLOR}
-          emissiveIntensity={0.4}
+          emissiveIntensity={1}
           metalness={0.8}
           roughness={0.2}
         />

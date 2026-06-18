@@ -1,1 +1,29 @@
-/workspace/copilot-agent/.mcp.json
+{
+  "mcpServers": {
+    "oraios/serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide",
+        "--project",
+        "${workspaceFolder}"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ]
+    },
+    "sound-effects-mcp": {
+      "command": "npx",
+      "args": ["-y", "sound-effects-mcp"]
+    }
+  }
+}

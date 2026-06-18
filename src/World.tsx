@@ -1,7 +1,7 @@
-import { Text } from '@react-three/drei'
+﻿import { Text } from '@react-three/drei'
 import { RigidBody } from '@react-three/rapier'
 import { SpawnPoint } from '@xrift/world-components'
-import { RemoteUserHUDs } from './components/RemoteUserHUDs'
+import { EntryLogBoard } from './components/EntryLogBoard'
 import { Skybox } from './components/Skybox'
 import { WORLD_CONFIG } from './constants'
 
@@ -90,7 +90,7 @@ const SignBoard: React.FC<SignBoardProps> = ({
   textColor = '#fff5d6',
 }) => (
   <group position={position} rotation={rotation}>
-    <mesh castShadow>
+    <mesh>
       <boxGeometry args={[width, height, 0.14]} />
       <meshStandardMaterial color={boardColor} />
     </mesh>
@@ -106,11 +106,11 @@ const Lantern: React.FC<{ position: Vector3Tuple }> = ({ position }) => (
       <cylinderGeometry args={[0.35, 0.35, 0.7, 20]} />
       <meshStandardMaterial color="#c93a2f" emissive="#401010" />
     </mesh>
-    <mesh position={[0, 0.42, 0]} castShadow>
+    <mesh position={[0, 0.42, 0]}>
       <cylinderGeometry args={[0.18, 0.18, 0.08, 20]} />
       <meshStandardMaterial color="#1f1f1f" />
     </mesh>
-    <mesh position={[0, -0.42, 0]} castShadow>
+    <mesh position={[0, -0.42, 0]}>
       <cylinderGeometry args={[0.18, 0.18, 0.08, 20]} />
       <meshStandardMaterial color="#1f1f1f" />
     </mesh>
@@ -119,11 +119,20 @@ const Lantern: React.FC<{ position: Vector3Tuple }> = ({ position }) => (
 
 const CeilingLight: React.FC<{ position: Vector3Tuple, size?: Vector3Tuple }> = ({ position, size = [3.6, 0.12, 0.8] }) => (
   <group position={position}>
-    <mesh castShadow>
+    <mesh>
       <boxGeometry args={size} />
-      <meshStandardMaterial color="#f5f1da" emissive="#fff5c0" emissiveIntensity={0.6} />
+      <meshStandardMaterial color="#f5f1da" emissive="#fff5c0" emissiveIntensity={0.95} />
     </mesh>
-    <pointLight position={[0, -0.2, 0]} intensity={10} distance={18} decay={2} />
+    <mesh position={[0, -0.1, 0]}>
+      <boxGeometry args={[size[0] * 0.78, 0.04, size[2] * 0.72]} />
+      <meshStandardMaterial
+        color="#fff5d6"
+        emissive="#fff1b0"
+        emissiveIntensity={1.6}
+        transparent
+        opacity={0.9}
+      />
+    </mesh>
   </group>
 )
 
@@ -138,7 +147,7 @@ const TableTopItems: React.FC = () => (
   <group>
     {TABLE_SEAT_OFFSETS.map(([x, , z], i) => (
       <group key={i}>
-        {/* ビール */}
+        {/* 繝薙・繝ｫ */}
         <group position={[x, 0.84, z]}>
           <mesh>
             <cylinderGeometry args={[0.06, 0.06, 0.28, 16]} />
@@ -149,7 +158,7 @@ const TableTopItems: React.FC = () => (
             <meshStandardMaterial color="#fff4dc" />
           </mesh>
         </group>
-        {/* 箸 */}
+        {/* 邂ｸ */}
         <group position={[x + 0.18, 0.83, z]} rotation={[0, 0.24, 0]}>
           <mesh position={[0.03, 0.01, 0]}>
             <boxGeometry args={[0.02, 0.02, 0.32]} />
@@ -171,11 +180,11 @@ const TableTopItems: React.FC = () => (
 
 const Chair: React.FC<ChairProps> = ({ position, rotation = 0 }) => (
   <group position={position} rotation={[0, rotation, 0]}>
-      <mesh position={[0, 0.46, 0]} castShadow>
+      <mesh position={[0, 0.46, 0]}>
         <boxGeometry args={[0.56, 0.08, 0.56]} />
         <meshStandardMaterial color="#7a1919" />
       </mesh>
-      <mesh position={[0, 0.8, -0.24]} castShadow>
+      <mesh position={[0, 0.8, -0.24]}>
         <boxGeometry args={[0.56, 0.6, 0.08]} />
         <meshStandardMaterial color="#7a1919" />
       </mesh>
@@ -185,7 +194,7 @@ const Chair: React.FC<ChairProps> = ({ position, rotation = 0 }) => (
         [-0.2, 0.21, 0.2],
         [0.2, 0.21, 0.2],
       ].map((leg, index) => (
-        <mesh key={index} position={leg as Vector3Tuple} castShadow>
+        <mesh key={index} position={leg as Vector3Tuple}>
           <boxGeometry args={[0.08, 0.42, 0.08]} />
           <meshStandardMaterial color="#4d2c17" />
         </mesh>
@@ -207,7 +216,7 @@ const TableSet: React.FC<TableSetProps> = ({ position }) => (
           [-0.93, 0.39, 0.37],
           [0.93, 0.39, 0.37],
         ].map((leg, index) => (
-          <mesh key={index} position={leg as Vector3Tuple} castShadow>
+          <mesh key={index} position={leg as Vector3Tuple}>
             <boxGeometry args={[0.12, 0.78, 0.12]} />
             <meshStandardMaterial color="#5f3416" />
           </mesh>
@@ -268,8 +277,8 @@ export const World: React.FC<WorldProps> = ({ position = [0, 0, 0], scale = 1 })
         position={[0, 14, 10]}
         intensity={0.75}
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
         shadow-camera-far={60}
         shadow-camera-left={-24}
         shadow-camera-right={24}
@@ -286,7 +295,7 @@ export const World: React.FC<WorldProps> = ({ position = [0, 0, 0], scale = 1 })
 
       <StaticBlock position={[0, -0.1, 0]} size={[worldWidth, 0.2, worldDepth]} color="#c69355" receiveShadow />
       <FloorAccent position={[0, 0.03, 15.4]} size={[6.6, 0.04, 3]} color="#3d3d3d" />
-      <FloorAccent position={[0, 0.02, -1.2]} size={[4.4, 0.02, 24]} color="#7f5a30" />
+      <FloorAccent position={[0, 0.02, 1.2]} size={[4.4, 0.02, 22]} color="#7f5a30" />
       <FloorAccent position={[roomX.leftFloorAccent, 0.02, 13.6]} size={[4.6, 0.02, 5]} color="#6a4023" />
       <FloorAccent position={[roomX.rightFloorAccent, 0.02, 14.7]} size={[4.8, 0.02, 7.5]} color="#cfd5db" />
       <FloorAccent position={[0, 0.02, -15.3]} size={[22, 0.02, 8.8]} color="#c8ced4" />
@@ -322,11 +331,11 @@ export const World: React.FC<WorldProps> = ({ position = [0, 0, 0], scale = 1 })
       <SignBoard position={[roomX.leftSign, 3.05, 12.45]} label="REGI" width={2.4} height={0.75} rotation={[0, Math.PI / 2, 0]} />
       <Lantern position={[roomX.leftLantern, 3.6, 15.8]} />
 
-      <StaticBlock position={[roomX.rightBoothCenter, 1.5, 11]} size={[3, 3, 0.24]} color="#d9e3ea" castShadow opacity={0.55} />
-      <StaticBlock position={[roomX.rightBoothCenter, 1.5, 18.35]} size={[3, 3, 0.24]} color="#d9e3ea" castShadow opacity={0.55} />
-      <StaticBlock position={[roomX.rightBoothWall, 1.5, 14.7]} size={[0.24, 3, 7.4]} color="#d9e3ea" castShadow opacity={0.55} />
-      <StaticBlock position={[roomX.rightBoothInner, 1.5, 12.6]} size={[0.18, 3, 2.6]} color="#d9e3ea" castShadow opacity={0.55} />
-      <StaticBlock position={[roomX.rightBoothInner, 1.5, 16.8]} size={[0.18, 3, 2.4]} color="#d9e3ea" castShadow opacity={0.55} />
+      <StaticBlock position={[roomX.rightBoothCenter, 1.5, 11]} size={[3, 3, 0.24]} color="#d9e3ea" opacity={0.55} />
+      <StaticBlock position={[roomX.rightBoothCenter, 1.5, 18.35]} size={[3, 3, 0.24]} color="#d9e3ea" opacity={0.55} />
+      <StaticBlock position={[roomX.rightBoothWall, 1.5, 14.7]} size={[0.24, 3, 7.4]} color="#d9e3ea" opacity={0.55} />
+      <StaticBlock position={[roomX.rightBoothInner, 1.5, 12.6]} size={[0.18, 3, 2.6]} color="#d9e3ea" opacity={0.55} />
+      <StaticBlock position={[roomX.rightBoothInner, 1.5, 16.8]} size={[0.18, 3, 2.4]} color="#d9e3ea" opacity={0.55} />
       <StaticBlock position={[roomX.rightBench, 0.58, 14.75]} size={[1.9, 1.16, 0.48]} color="#6e4728" castShadow />
       <StaticBlock position={[roomX.rightStand, 0.7, 14.7]} size={[0.4, 1.4, 0.4]} color="#8e959c" castShadow />
       <SignBoard position={[roomX.rightSign, 3.05, 15.15]} label="SMOKING" width={2.8} height={0.72} rotation={[0, -Math.PI / 2, 0]} boardColor="#3a4d66" />
@@ -345,8 +354,10 @@ export const World: React.FC<WorldProps> = ({ position = [0, 0, 0], scale = 1 })
         <TableSet key={index} position={tablePosition} />
       ))}
 
+      <EntryLogBoard position={[-11.8, 1.5, 16]} rotation={[0, Math.PI / 2, 0]} scale={0.7} />
       <SpawnPoint position={[0, 0, 16.4]} />
-      <RemoteUserHUDs />
+      
     </group>
   )
 }
+
